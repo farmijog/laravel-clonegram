@@ -49,7 +49,7 @@ class PostsController extends Controller
             'image' => $imagePath
         ]);
 
-        return redirect('/profile/' . auth()->user()->id);
+        return redirect('/' . auth()->user()->username);
     }
 
     public function show(\App\Post $post)

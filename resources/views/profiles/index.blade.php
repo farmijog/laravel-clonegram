@@ -18,7 +18,7 @@
                 @endcan
             </div>
             @can('update', $user->profile)
-                <a href="/profile/{{ $user->id }}/edit">Edit Profile</a>
+                <a href="/{{ $user->username }}/edit">Edit Profile</a>
             @endcan
             <div class="d-flex">
                 <div class="pr-5"><strong>{{ $postCount }}</strong> posts</div>

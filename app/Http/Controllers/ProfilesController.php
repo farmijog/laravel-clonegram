@@ -11,12 +11,7 @@ use function foo\func;
 
 class ProfilesController extends Controller
 {
-    public function show()
-    {
-        return 'jelow';
-    }
-
-    public function index(User $user)
+    public function show(User $user)
     {
         $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
 
@@ -24,15 +19,15 @@ class ProfilesController extends Controller
             'count.posts.' . $user->id,
             now()->addSeconds(30),
             function () use ($user) {
-            return $user->posts->count();
-        });
+                return $user->posts->count();
+            });
 
         $followersCount = Cache::remember(
-          'count.followers.' . $user->id,
-          now()->addSeconds(30),
-          function () use ($user) {
-              return $user->profile->followers->count();
-          }
+            'count.followers.' . $user->id,
+            now()->addSeconds(30),
+            function () use ($user) {
+                return $user->profile->followers->count();
+            }
         );
         $followingCount = Cache::remember(
             'count.following.' . $user->id,
@@ -45,7 +40,40 @@ class ProfilesController extends Controller
 //        $user = User::findOrFail($user);
 
         return view('profiles.index', compact('user', 'follows', 'postCount', 'followersCount', 'followingCount'));
+
     }
+
+//    public function index(User $user)
+//    {
+//        $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
+//
+//        $postCount = Cache::remember(
+//            'count.posts.' . $user->id,
+//            now()->addSeconds(30),
+//            function () use ($user) {
+//            return $user->posts->count();
+//        });
+//
+//        $followersCount = Cache::remember(
+//          'count.followers.' . $user->id,
+//          now()->addSeconds(30),
+//          function () use ($user) {
+//              return $user->profile->followers->count();
+//          }
+//        );
+//        $followingCount = Cache::remember(
+//            'count.following.' . $user->id,
+//            now()->addSeconds(30),
+//            function () use ($user) {
+//                return $user->following->count();
+//            }
+//        );
+//
+////        $user = User::findOrFail($user);
+//
+//        return view('profiles.index', compact('user', 'follows', 'postCount', 'followersCount', 'followingCount'));
+//
+//    }
 
 
 
@@ -82,6 +110,6 @@ class ProfilesController extends Controller
             $imageArray ?? []
         ));
 
-        return redirect("/profile/{$user->id}");
+        return redirect("/{$user->username}");
     }
 }
